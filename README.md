@@ -14,7 +14,7 @@ MitfahrerDB, Oberstufenprojekt FI007.
 - [Material-UI](https://github.com/callemall/material-ui) Component Library
 - [ReactHookForm](https://github.com/react-hook-form/react-hook-form) for easy Forms
 - [LeafletReact](https://github.com/PaulLeCam/react-leaflet) for interactive Map
-- [ESLint](https://github.com/eslint/eslint) for linting640b62fa83a20897cae75298a9f2715642531623).
+- [ESLint](https://github.com/eslint/eslint) for linting.
 - [Prettier](https://github.com/prettier/prettier) for formatting
 - [Axios](https://github.com/axios/axios) for API fetching
 
