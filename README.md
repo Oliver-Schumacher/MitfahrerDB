@@ -25,5 +25,5 @@ MitfahrerDB, Oberstufenprojekt FI007.
 ## Start working
 
 ```
-$ npm start
+$ yarn start
 ```
