@@ -13,7 +13,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {

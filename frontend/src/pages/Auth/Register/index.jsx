@@ -29,7 +29,7 @@ const genders = [
   }
 ];
 
-export default function SignUp() {
+export default function Register() {
   const [gender, setGender] = React.useState('');
 
   const handleChange = (event) => {

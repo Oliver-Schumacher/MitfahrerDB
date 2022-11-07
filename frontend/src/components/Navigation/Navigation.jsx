@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { Link, NavLink } from 'react-router-dom';
 import './Navigation.css';
 
-function ResponsiveAppBar() {
+function Navigation() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -85,20 +85,12 @@ function ResponsiveAppBar() {
                 display: { xs: 'block', md: 'none' }
               }}>
               <MenuItem onClick={handleCloseNavMenu}>
-                <NavLink
-                  style={activeStyle}
-                  className={'nav-link__mobile'}
-                  to={'/SignUp'}
-                  textAlign="center">
+                <NavLink style={activeStyle} className={'nav-link__mobile'} to={'/manage'}>
                   Meine Fahrten
                 </NavLink>
               </MenuItem>
               <MenuItem onClick={handleCloseNavMenu}>
-                <NavLink
-                  style={activeStyle}
-                  className={'nav-link__mobile'}
-                  to={'/'}
-                  textAlign="center">
+                <NavLink style={activeStyle} className={'nav-link__mobile'} to={'/search'}>
                   Fahrt suchen
                 </NavLink>
               </MenuItem>
@@ -106,10 +98,10 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            <NavLink style={activeStyle} className={'nav-link'} to={'/SignUp'}>
+            <NavLink style={activeStyle} className={'nav-link'} to={'/manage'}>
               Meine Fahrten
             </NavLink>
-            <NavLink style={activeStyle} className={'nav-link'} to={''}>
+            <NavLink style={activeStyle} className={'nav-link'} to={'/search'}>
               Fahrt suchen
             </NavLink>
           </Box>
@@ -136,12 +128,12 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}>
               <MenuItem onClick={handleCloseUserMenu}>
-                <NavLink className={'nav-link__mobile'} to={'/'} textAlign="center">
+                <NavLink className={'nav-link__mobile'} to={'/profile'}>
                   Profil
                 </NavLink>
               </MenuItem>
               <MenuItem onClick={handleCloseUserMenu}>
-                <NavLink className={'nav-link__mobile'} to={'/SignIn'} textAlign="center">
+                <NavLink className={'nav-link__mobile'} to={'/login '}>
                   Logout
                 </NavLink>
               </MenuItem>
@@ -152,4 +144,4 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
-export default ResponsiveAppBar;
+export default Navigation;
