@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace MitfahrerDB_Backend.Controllers
+namespace backend_mitfahrerdb.Controllers
 {
     [ApiController]
     [Route("[controller]")]

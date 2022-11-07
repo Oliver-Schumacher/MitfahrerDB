@@ -1,4 +1,4 @@
-namespace MitfahrerDB_Backend
+namespace backend_mitfahrerdb
 {
     public class WeatherForecast
     {
