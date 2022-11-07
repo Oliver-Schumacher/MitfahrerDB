@@ -20,8 +20,20 @@ MitfahrerDB, Oberstufenprojekt FI007.
 
 ### Backend
 
-- [Flask](https://github.com/pallets/flask) for API fetching
+- Dotnet Webapi
 
+### Datenbank
+- EF Core
+- Die Klassen sind in der Datei "DataBaseContext.cs" Definiert.
+- Datenbank generieren:
+1. (Falls noch nicht installiert)
+```sh
+dotnet tool install --global dotnet-ef
+```
+2. Migrationen anwenden
+```sh
+dotnet ef database update
+```
 ## Start working
 
 ```
