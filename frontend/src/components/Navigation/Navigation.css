@@ -1,0 +1,10 @@
+.nav-link {
+  color: white;
+  font-weight: 400;
+  margin-right: 2.5rem;
+}
+
+.nav-link__mobile {
+  color: black;
+  text-decoration: none;
+}
