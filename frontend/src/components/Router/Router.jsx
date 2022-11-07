@@ -6,18 +6,39 @@ import Login from '../../pages/Auth/Login/index';
 import Profile from '../../pages/Profile/index';
 import Search from '../../pages/Search/index';
 import Manage from '../../pages/Manage/index';
-import RouteGuard from './RouteGuard';
+import Protected from './RouteGuard';
 
 function Router() {
   return (
     <Routes>
       <Route index element={<Login />} />
+      <Route path="*" element={<Error404 />} />q
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/search" element={<Search />} />
-      <Route path="/manage" element={<Manage />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="*" element={<Error404 />} />
+      <Route
+        path="/search"
+        element={
+          <Protected>
+            <Search />
+          </Protected>
+        }
+      />
+      <Route
+        path="/manage"
+        element={
+          <Protected>
+            <Manage />
+          </Protected>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <Protected>
+            <Profile />
+          </Protected>
+        }
+      />
     </Routes>
   );
 }
