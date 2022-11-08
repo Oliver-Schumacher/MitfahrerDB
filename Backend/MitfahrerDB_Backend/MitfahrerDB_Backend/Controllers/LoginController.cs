@@ -7,7 +7,7 @@ using System.Security;
 namespace MitfahrerDB_Backend.Controllers
 {
     [ApiController]
-    [Route("login")]
+    [Route("[controller]")]
     public class LoginController : ControllerBase
     {
         private readonly ILogger<LoginController> _logger;
@@ -28,9 +28,9 @@ namespace MitfahrerDB_Backend.Controllers
         {
             //Übergebenen User, danach Prüfen ob dieser Login gültig ist. 
             if (VerifyUser(Email, Password))
-                return Accepted();
+                return Ok();
             else
-                return NotFound();
+                return BadRequest();
         }
 
         /// <summary>
