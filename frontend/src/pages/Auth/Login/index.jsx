@@ -9,19 +9,16 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { handleLogin } from '../../../api/auth';
 
 const theme = createTheme();
 
 export default function Login() {
-  const navigate = useNavigate();
-
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     handleLogin({ _email: data.get('email'), _password: data.get('password') });
-    setTimeout(navigate('/manage'), 2500);
   };
 
   return (
