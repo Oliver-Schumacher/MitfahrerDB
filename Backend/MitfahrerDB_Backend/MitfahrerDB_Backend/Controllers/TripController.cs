@@ -1,3 +1,4 @@
+using System.Threading.Tasks.Dataflow;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MitfahrerDB_Backend.Controllers;
@@ -40,26 +41,15 @@ public class TripController : ControllerBase
                             bool sameGender,
                             int availableSeats)
     {
-        var locationStart = new Location()
-        {
-            Latitude = locStartLat,
-            Longitude = locStartLong
-        };
-        var locationEnd = new Location()
-        {
-            Latitude = locEndLat,
-            Longitude = locEndLong
-        };
+
+        var locationStart = GetLocation(locStartLat, locStartLong);
+        var locationEnd = GetLocation(locEndLat, locEndLong);
 
         var driverError = ValidateDriver(driverId);
         if (!driverError.success) return BadRequest(driverError.message);
         
         //TODO ValidateStartTime
         //TODO ValidateSeats
-
-        _db.Locations.Add(locationStart);
-        _db.Locations.Add(locationEnd);
-        _db.SaveChanges();
 
         var trip = new Trip()
         {
@@ -76,6 +66,29 @@ public class TripController : ControllerBase
         return Ok();
     }
 
+    /// <summary>
+    /// Tries to get a Location based on Latitude and Longitude, If not exists Create a new Database Table
+    /// </summary>
+    /// <param name="latitude"></param>
+    /// <param name="longitude"></param>
+    /// <returns></returns>
+    [NonAction]
+    private Location GetLocation(string latitude, string longitude)
+    {
+        var location = _db.Locations.FirstOrDefault(l => (l.Latitude == latitude) && (l.Longitude == longitude));
+        if (location is not null) return location;
+        location = new Location()
+        {
+            Latitude = latitude,
+            Longitude = longitude
+        };
+
+        _db.Locations.Add(location);
+        _db.SaveChanges();
+
+        return location;
+    }
+    
     [NonAction]
     private (bool success, string message) ValidateDriver(int id)
     {
