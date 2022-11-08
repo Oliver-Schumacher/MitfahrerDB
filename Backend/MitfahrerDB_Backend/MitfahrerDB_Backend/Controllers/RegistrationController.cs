@@ -9,6 +9,7 @@ namespace MitfahrerDB_Backend.Controllers
     {
         private readonly ILogger<RegistrationController> _logger;
         private readonly DataBaseContext _db = new DataBaseContext();
+        private const string emailServerExtension = "@gso.schule.koeln";
         
         public RegistrationController(ILogger<RegistrationController> logger)
         {
@@ -16,18 +17,14 @@ namespace MitfahrerDB_Backend.Controllers
         }
 
         [HttpGet(Name = "GetRegistration")]
-        public string Get()
+        public List<Gender> Get()
         {
-            return "Hello World";
-            //TODO get genders that are available in database
+            return _db.Genders.ToList();
         }
         
         [HttpPost(Name = "PostRegistration")]
         public IActionResult Post(string userName, string email, string password, int genderId)
         {
-            //TODO return jwt token?
-            //return null;
-
             var userResult = CheckName(userName);
             if (!userResult.success)
             {
@@ -40,7 +37,7 @@ namespace MitfahrerDB_Backend.Controllers
                 return BadRequest(mailResult.message);
             }
 
-            User user = new User
+            var user = new User
             {
                 Name = userName,
                 Mail = email,
@@ -48,15 +45,15 @@ namespace MitfahrerDB_Backend.Controllers
                 Passwort = password
             };
             _db.Users.Add(user);
-            _db.SaveChanges();
- 
+            var rowsInserted = _db.SaveChanges();
+            if (rowsInserted == 0) return BadRequest("The User could not be written into the Database");
             return Ok();
         }
 
         [NonAction]
         private (bool success, string message) CheckMail(string mailAddress)
         {
-            if (!mailAddress.ToLower().EndsWith("@gso.schule.koeln")) return (false, "Mail must end with @gso.schule.koeln");
+            if (!mailAddress.ToLower().EndsWith(emailServerExtension)) return (false, $"Mail must end with {emailServerExtension}.");
 
             var user = _db.Users.FirstOrDefault(u => u.Mail.ToLower() == mailAddress.ToLower());
             if (user is not null) return (false, $"Mail {mailAddress} Already exists.");
