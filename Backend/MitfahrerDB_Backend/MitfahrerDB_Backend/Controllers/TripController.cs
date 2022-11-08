@@ -26,9 +26,18 @@ public class TripController : ControllerBase
     [Route("/Trip/{id}")]
     public ActionResult Get(int id)
     {
-        var trip = _db.Trips.FirstOrDefault(t => t.Id == id);
-        if (trip is null) return BadRequest($"Trip {id} could not be found");
-        return Ok(trip);
+        // var trip = _db.Trips.FirstOrDefault(t => t.Id == id);
+        // if (trip is null) return BadRequest($"Trip {id} could not be found");
+        // return Ok(trip);
+
+        var tripsDriver = _db.Trips.Join(_db.Users, trip => trip.DriverId,
+            user => user.Id,
+            ((trip, user) => new
+            {
+                DriverId = user.Id,
+                DriverName = user.Name
+            })).ToList();
+        return Ok(tripsDriver);
     }
 
     [HttpPost]
@@ -41,16 +50,15 @@ public class TripController : ControllerBase
                             bool sameGender,
                             int availableSeats)
     {
-
-        var locationStart = GetLocation(locStartLat, locStartLong);
-        var locationEnd = GetLocation(locEndLat, locEndLong);
-
         var driverError = ValidateDriver(driverId);
         if (!driverError.success) return BadRequest(driverError.message);
         
         //TODO ValidateStartTime
         //TODO ValidateSeats
 
+        var locationStart = GetLocation(locStartLat, locStartLong);
+        var locationEnd = GetLocation(locEndLat, locEndLong);
+        
         var trip = new Trip()
         {
             LocationStartId = locationStart.Id,
@@ -98,6 +106,23 @@ public class TripController : ControllerBase
         if (driver is null) return (false, $"The Driver with the ID {id} does not exist");
         
         return (true, "");
+    }
+
+    [HttpPut]
+    [Route("/Trip/{id}")]
+    public IActionResult OnPut(string locStartLong, 
+                                string locStartLat, 
+                                string locEndLong, 
+                                string locEndLat, 
+                                int driverId, 
+                                string startTime, 
+                                bool sameGender,
+                                int availableSeats)
+    {
+        var locationStart = GetLocation(locStartLat, locStartLong);
+        var locationEnd = GetLocation(locEndLat, locEndLong);
+        
+        return Ok();
     }
 
 }
