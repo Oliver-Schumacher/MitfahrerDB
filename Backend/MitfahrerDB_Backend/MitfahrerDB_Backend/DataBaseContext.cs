@@ -17,7 +17,6 @@ public class DataBaseContext : DbContext
     public DataBaseContext()
     {
         DbPath = Path.Join(Directory.GetCurrentDirectory(), "mitfahrer.db");
-        Console.WriteLine(DbPath);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

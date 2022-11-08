@@ -8,7 +8,7 @@ namespace MitfahrerDB_Backend.Controllers
     public class RegistrationController : ControllerBase
     {
         private readonly ILogger<RegistrationController> _logger;
-        private DataBaseContext _db = new DataBaseContext();
+        private readonly DataBaseContext _db = new DataBaseContext();
         
         public RegistrationController(ILogger<RegistrationController> logger)
         {
@@ -23,37 +23,54 @@ namespace MitfahrerDB_Backend.Controllers
         }
         
         [HttpPost(Name = "PostRegistration")]
-        public IActionResult Post(string user, string email, string password)
+        public IActionResult Post(string userName, string email, string password, int genderId)
         {
             //TODO return jwt token?
             //return null;
 
-            if (CheckName(user))
+            var userResult = CheckName(userName);
+            if (!userResult.success)
             {
-                return BadRequest("The user already exists");
-            }
-            
-            if (CheckMail(email))
-            {
-                return BadRequest("Mail is not a GSO Mail");
+                return BadRequest(userResult.message);
             }
 
-            
-            //TODO Check Password
+            var mailResult = CheckMail(email);
+            if (!mailResult.success)
+            {
+                return BadRequest(mailResult.message);
+            }
+
+            User user = new User
+            {
+                Name = userName,
+                Mail = email,
+                GenderId = genderId,
+                Passwort = password
+            };
+            _db.Users.Add(user);
+            _db.SaveChanges();
+ 
             return Ok();
         }
 
         [NonAction]
-        private bool CheckMail(string mailAddress)
+        private (bool success, string message) CheckMail(string mailAddress)
         {
-            return !mailAddress.ToLower().EndsWith("@gso.schule.koeln");
+            if (!mailAddress.ToLower().EndsWith("@gso.schule.koeln")) return (false, "Mail must end with @gso.schule.koeln");
+
+            var user = _db.Users.FirstOrDefault(u => u.Mail.ToLower() == mailAddress.ToLower());
+            if (user is not null) return (false, $"Mail {mailAddress} Already exists.");
+
+            return (true, "");
         }
         
         [NonAction]
-        private bool CheckName(string name)
+        private (bool success, string message) CheckName(string name)
         {
             var user = _db.Users.FirstOrDefault(u => u.Name.ToLower() == name.ToLower());
-            return user is not null;
+            if (user is not null) return (false, $"The User {name} already exists.");
+
+            return (true, "");
         }
     }
 }
