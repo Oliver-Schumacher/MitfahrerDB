@@ -70,6 +70,7 @@ public class TripController : ControllerBase
             SameGender = sameGender,
             AvailableSeats = availableSeats
         };
+        _db.Trips.Add(trip);
         _db.SaveChanges();
         
         return Ok();
