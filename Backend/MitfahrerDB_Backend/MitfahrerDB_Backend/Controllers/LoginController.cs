@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SQLitePCL;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security;
 
 namespace MitfahrerDB_Backend.Controllers
@@ -24,13 +25,16 @@ namespace MitfahrerDB_Backend.Controllers
         /// <param name="loginUser"></param>
         /// <returns></returns>
         [HttpPost(Name = "PostLogin")]
-        public IActionResult UserLogin(string Email, string Password)
+        public JwtSecurityToken UserLogin(string Email, string Password)
         {
+            JwtSecurityToken token;
             //Übergebenen User, danach Prüfen ob dieser Login gültig ist. 
             if (VerifyUser(Email, Password))
-                return Ok();
+                token = new JwtSecurityToken("MitfahrerDB", "UserLogin", null, DateTime.Now, DateTime.Now.AddHours(2), null);
             else
-                return BadRequest();
+                token = new JwtSecurityToken("MitfahrerDB", "UserLogin", null, null, null, null);
+
+            return token ;
         }
 
         /// <summary>
