@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.CompilerServices;
 using System.Security.Claims;
 using System.Text;
 
@@ -68,7 +69,7 @@ namespace MitfahrerDB_Backend.Controllers
         [NonAction]
         private bool VerifyUser(string email, string password)
         {
-            if ((email != string.Empty && VerifyEmailAdress(email)) && (password != string.Empty))
+            if ((email != string.Empty && CheckMail(email).success) && (password != string.Empty))
             {
                 var user = _db.Users.FirstOrDefault(u => u.Mail.ToLower() == email.ToLower() && u.Passwort.ToLower() == password.ToLower());
                 if (user is not null)
@@ -77,24 +78,11 @@ namespace MitfahrerDB_Backend.Controllers
             return false;
         }
 
-        /// <summary>
-        /// Verifiziert die Übergebene E-Mail-Adresse. 
-        /// </summary>
-        /// <param name="email"></param>
-        /// <returns></returns>
-        [NonAction]
-        private bool VerifyEmailAdress(string email)
-        {
-            if (email.Contains("@gso.schule.koeln"))
-                return true;
-            return false;
-        }
-
         #endregion login
 
         #region registration
 
-        [HttpGet(Name = "GetRegistration")]
+        [HttpGet("Registration")]
         public List<Gender> Get()
         {
             return _db.Genders.ToList();
@@ -149,7 +137,7 @@ namespace MitfahrerDB_Backend.Controllers
         }
         #endregion registration
 
-        [HttpGet("Profile{UserId}")]
+        [HttpGet("Profile")]
         public List<string> GetProfile(int UserId)
         {
             List<string> userInformation = new List<string>();
@@ -158,34 +146,41 @@ namespace MitfahrerDB_Backend.Controllers
                 var user = _db.Users.FirstOrDefault(u => u.Id == UserId);
                 if (user != null)
                 {
+                    userInformation.Add("UserId: " + user.Id.ToString());
                     userInformation.Add("Name: " + user.Name.ToString());
                     userInformation.Add("Mail: " + user.Mail.ToString());
                     userInformation.Add("GenderId: " + user.GenderId.ToString());
-                    //userInformation.Add("Phonenumber:" + user.PhoneNumber.ToString());
+                    userInformation.Add("Phonenumber:" + user.Phone.ToString());
                 }
             }
             return userInformation;
         }
-        //[HttpPost("Profile/Update{UserId}{Name}{Mail}{GenderId}{Phonenumber}")]
-        //public IActionResult UpdateProfile(int userid, string name, string Mail, int GenderId, string phonenumber)
-        //{
-        //    if (userid != null)
-        //    {
-        //        var user = _db.Users.FirstOrDefault(u => u.Id == userid);
-        //        if (user != null)
-        //        {
-        //            if (name != String.Empty && user.Name != name)
-        //                user.Name = name;
-        //            if (Mail != String.Empty && user.Mail != Mail)
-        //                user.Mail = Mail;
-        //            if (GenderId != null && user.GenderId != GenderId)
-        //                user.GenderId = GenderId;
-        //            //if (phonenumber != String.Empty && user.phonenumber != phonenumber)
-        //            //    user.phonenumber = phonenumber;
-        //            return Ok();
-        //        }
-        //    }
-        //    return BadRequest();
-        //}
+
+        [HttpPost("Profile")]
+        public IActionResult UpdateProfile(int UserId, string Name, string Mail, int GenderId, string Phone)
+        {
+            if (UserId != null)
+            {
+                var user = _db.Users.FirstOrDefault(u => u.Id == UserId);
+                if (user != null)
+                {
+                    if (Name != String.Empty && user.Name != Name)
+                        user.Name = Name;
+                    if ((Mail != String.Empty && user.Mail != Mail) && (CheckMail(Mail).success))
+                        user.Mail = Mail;
+                    if (GenderId != null && user.GenderId != GenderId)
+                        user.GenderId = GenderId;
+                    if (Phone != String.Empty && user.Phone != Phone)
+                        user.Phone = Phone;
+
+                    _db.Users.Update(user);
+                    var updatedrows = _db.SaveChanges();
+                    if (updatedrows == 0) 
+                        return BadRequest("The user could not be updated!");
+                    return Ok();
+                }
+            }
+            return BadRequest("UserId was not found!");
+        }
     }
 }
