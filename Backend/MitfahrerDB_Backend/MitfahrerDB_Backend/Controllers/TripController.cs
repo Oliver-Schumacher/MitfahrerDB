@@ -117,12 +117,22 @@ public class TripController : ControllerBase
                                 int driverId, 
                                 string startTime, 
                                 bool sameGender,
-                                int availableSeats)
+                                int availableSeats,
+                                int id)
     {
+        
+        var trip = _db.Trips.FirstOrDefault(t => t.Id == id);
+        if (trip is null) return BadRequest($"The Trip {id} could not be found");
+        
         var locationStart = GetLocation(locStartLat, locStartLong);
         var locationEnd = GetLocation(locEndLat, locEndLong);
         
+        var driverError = ValidateDriver(driverId);
+        if (!driverError.success) return BadRequest(driverError.message);
+        
         return Ok();
     }
+
+
 
 }
