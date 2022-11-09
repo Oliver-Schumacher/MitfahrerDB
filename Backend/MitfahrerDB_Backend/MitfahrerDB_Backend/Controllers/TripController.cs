@@ -17,27 +17,19 @@ public class TripController : ControllerBase
 
     [HttpGet]
     [Route("/Trips")]
-    public List<Trip> Get()
+    public IActionResult Get()
     {
-        return _db.Trips.ToList();
+        var trips = _db.Trips.Where(t => t.Id != 0);
+        return Ok(trips);
     }
 
     [HttpGet]
     [Route("/Trip/{id}")]
     public ActionResult Get(int id)
     {
-        // var trip = _db.Trips.FirstOrDefault(t => t.Id == id);
-        // if (trip is null) return BadRequest($"Trip {id} could not be found");
-        // return Ok(trip);
-
-        var tripsDriver = _db.Trips.Join(_db.Users, trip => trip.DriverId,
-            user => user.Id,
-            ((trip, user) => new
-            {
-                DriverId = user.Id,
-                DriverName = user.Name
-            })).ToList();
-        return Ok(tripsDriver);
+        var trip = _db.Trips.FirstOrDefault(t => t.Id == id);
+        if (trip is null) return BadRequest($"Trip {id} could not be found");
+        return Ok(trip);
     }
 
     [HttpPost]
@@ -68,7 +60,7 @@ public class TripController : ControllerBase
         _db.Trips.Add(trip);
         _db.SaveChanges();
         
-        return Ok();
+        return Ok(trip);
     }
 
     /// <summary>
@@ -128,7 +120,7 @@ public class TripController : ControllerBase
         trip.SameGender = sameGender;
         trip.AvailableSeats = availableSeats;
         
-        return (_db.SaveChanges() != 0 ? Ok() : BadRequest($"Could not update trip {id}")); 
+        return (_db.SaveChanges() != 0 ? Ok(trip) : BadRequest($"Could not update trip {id}")); 
     }
 
     [Route("/Trip/{id}")]
