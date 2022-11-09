@@ -23,14 +23,4 @@ public class DataBaseContext : DbContext
     {
         optionsBuilder.UseSqlite($"Data Source={DbPath}");
     }
-    
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Trip>()
-            .HasOne<Location>(t => t.LocationStart)
-            .WithMany();
-        modelBuilder.Entity<Trip>()
-            .HasOne<Location>(t => t.LocationEnd)
-            .WithMany();
-    }
 }
