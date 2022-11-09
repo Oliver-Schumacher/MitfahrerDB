@@ -16,7 +16,7 @@ namespace MitfahrerDB_Backend.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
 
-            modelBuilder.Entity("MitfahrerDB_Backend.Gender", b =>
+            modelBuilder.Entity("MitfahrerDB_Backend.Models.Gender", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,7 +31,7 @@ namespace MitfahrerDB_Backend.Migrations
                     b.ToTable("Genders");
                 });
 
-            modelBuilder.Entity("MitfahrerDB_Backend.Location", b =>
+            modelBuilder.Entity("MitfahrerDB_Backend.Models.Location", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,7 +50,7 @@ namespace MitfahrerDB_Backend.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("MitfahrerDB_Backend.Trip", b =>
+            modelBuilder.Entity("MitfahrerDB_Backend.Models.Trip", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,7 +86,7 @@ namespace MitfahrerDB_Backend.Migrations
                     b.ToTable("Trips");
                 });
 
-            modelBuilder.Entity("MitfahrerDB_Backend.User", b =>
+            modelBuilder.Entity("MitfahrerDB_Backend.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -118,7 +118,7 @@ namespace MitfahrerDB_Backend.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("MitfahrerDB_Backend.UserTrip", b =>
+            modelBuilder.Entity("MitfahrerDB_Backend.Models.UserTrip", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -139,21 +139,21 @@ namespace MitfahrerDB_Backend.Migrations
                     b.ToTable("UserTrips");
                 });
 
-            modelBuilder.Entity("MitfahrerDB_Backend.Trip", b =>
+            modelBuilder.Entity("MitfahrerDB_Backend.Models.Trip", b =>
                 {
-                    b.HasOne("MitfahrerDB_Backend.User", "Driver")
+                    b.HasOne("MitfahrerDB_Backend.Models.User", "Driver")
                         .WithMany()
                         .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MitfahrerDB_Backend.Location", "LocationEnd")
+                    b.HasOne("MitfahrerDB_Backend.Models.Location", "LocationEnd")
                         .WithMany()
                         .HasForeignKey("LocationEndId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MitfahrerDB_Backend.Location", "LocationStart")
+                    b.HasOne("MitfahrerDB_Backend.Models.Location", "LocationStart")
                         .WithMany()
                         .HasForeignKey("LocationStartId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -166,9 +166,9 @@ namespace MitfahrerDB_Backend.Migrations
                     b.Navigation("LocationStart");
                 });
 
-            modelBuilder.Entity("MitfahrerDB_Backend.User", b =>
+            modelBuilder.Entity("MitfahrerDB_Backend.Models.User", b =>
                 {
-                    b.HasOne("MitfahrerDB_Backend.Gender", "Gender")
+                    b.HasOne("MitfahrerDB_Backend.Models.Gender", "Gender")
                         .WithMany()
                         .HasForeignKey("GenderId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -177,15 +177,15 @@ namespace MitfahrerDB_Backend.Migrations
                     b.Navigation("Gender");
                 });
 
-            modelBuilder.Entity("MitfahrerDB_Backend.UserTrip", b =>
+            modelBuilder.Entity("MitfahrerDB_Backend.Models.UserTrip", b =>
                 {
-                    b.HasOne("MitfahrerDB_Backend.Trip", "Trip")
+                    b.HasOne("MitfahrerDB_Backend.Models.Trip", "Trip")
                         .WithMany()
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MitfahrerDB_Backend.User", "User")
+                    b.HasOne("MitfahrerDB_Backend.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
