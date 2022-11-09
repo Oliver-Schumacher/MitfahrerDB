@@ -52,9 +52,6 @@ public class TripController : ControllerBase
     {
         var driverError = ValidateDriver(driverId);
         if (!driverError.success) return BadRequest(driverError.message);
-        
-        //TODO ValidateStartTime
-        //TODO ValidateSeats
 
         var locationStart = GetLocation(locStartLat, locStartLong);
         var locationEnd = GetLocation(locEndLat, locEndLong);
@@ -134,6 +131,15 @@ public class TripController : ControllerBase
         return (_db.SaveChanges() != 0 ? Ok() : BadRequest($"Could not update trip {id}")); 
     }
 
+    [Route("/Trip/{id}")]
+    [HttpDelete]
+    public IActionResult OnDelete(int id)
+    {
+        var trip = _db.Trips.FirstOrDefault(t => t.Id == id);
+        if (trip is null) return BadRequest($"Could not find Trip {id}");
 
+        _db.Trips.Remove(trip);
+        return (_db.SaveChanges() != 0 ? Ok() : BadRequest($"Could not Delete Trip {id}"));
+    }
 
 }
