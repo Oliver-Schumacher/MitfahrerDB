@@ -17,25 +17,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// builder.Services.AddAuthentication(options =>
-// {
-//     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme; 
-//     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-//     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-// }).AddJwtBearer(o => 
-// {
-//     o.TokenValidationParameters = new TokenValidationParameters
-//     {
-//         ValidIssuer = builder.Configuration["Jwt:Aussteller"],
-//         ValidAudience = builder.Configuration["Jwt:Zielgruppe"],
-//         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Schluessel"])),
-//         ValidateIssuer = true,
-//         ValidateAudience = true,
-//         ValidateLifetime = false,
-//         ValidateIssuerSigningKey = true
-//     };
-// }
-//     );
 builder.Services.AddAuthentication();
 var app = builder.Build();
 app.UseAuthentication();
