@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using MitfahrerDB_Backend.Models;
 
 namespace MitfahrerDB_Backend.Controllers
 {
@@ -101,7 +102,7 @@ namespace MitfahrerDB_Backend.Controllers
         }
 
         [HttpPost("Registration")]
-        public IActionResult Post(string userName, string email, string password, int genderId)
+        public IActionResult Post(string userName, string email, string password, int genderId, string phone)
         {
             var userResult = CheckName(userName);
             if (!userResult.success)
@@ -120,7 +121,8 @@ namespace MitfahrerDB_Backend.Controllers
                 Name = userName,
                 Mail = email,
                 GenderId = genderId,
-                Passwort = password
+                Passwort = password,
+                Phone = phone
             };
             _db.Users.Add(user);
             var rowsInserted = _db.SaveChanges();

@@ -4,7 +4,7 @@
 
 namespace MitfahrerDB_Backend.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class InitalCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -44,6 +44,7 @@ namespace MitfahrerDB_Backend.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: false),
                     Mail = table.Column<string>(type: "TEXT", nullable: false),
                     Passwort = table.Column<string>(type: "TEXT", nullable: false),
+                    Phone = table.Column<string>(type: "TEXT", nullable: false),
                     GenderId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
