@@ -53,13 +53,13 @@ namespace MitfahrerDB_Backend.Controllers
         /// <param name="loginUser"></param>
         /// <returns></returns>
         [HttpPost("Login")]
-        public JwtSecurityToken UserLogin(string Email = "", string Password = "")
+        public IActionResult UserLogin(string Email = "", string Password = "")
         {
             if (VerifyUser(Email, Password))
             {
-                return GenerateToken(Email);
+                return Ok(GenerateToken(Email));
             }
-            return GenerateToken(Email);
+            return BadRequest("Login failed!");
         }
 
         /// <summary>
@@ -138,19 +138,11 @@ namespace MitfahrerDB_Backend.Controllers
         #endregion registration
 
         [HttpGet("Profile")]
-        public List<string> GetProfile(int UserId)
+        public IActionResult GetProfile(int UserId)
         {
-            List<string> userInformation = new List<string>();
             var user = _db.Users.FirstOrDefault(u => u.Id == UserId);
-            if (user != null)
-            {
-                userInformation.Add("UserId: " + user.Id.ToString());
-                userInformation.Add("Name: " + user.Name?.ToString());
-                userInformation.Add("Mail: " + user.Mail?.ToString());
-                userInformation.Add("GenderId: " + user.GenderId.ToString());
-                userInformation.Add("Phonenumber:" + user.Phone?.ToString());
-            }
-            return userInformation;
+            if (user is null) return BadRequest("User not found");
+            return Ok(user);
         }
 
         [HttpPost("Profile")]
@@ -172,7 +164,7 @@ namespace MitfahrerDB_Backend.Controllers
                 var updatedrows = _db.SaveChanges();
                 if (updatedrows == 0)
                     return BadRequest("The user could not be updated!");
-                return Ok();
+                return Ok("User saved");
             }
             return BadRequest("UserId was not found!");
         }
