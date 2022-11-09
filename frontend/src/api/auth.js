@@ -27,3 +27,7 @@ export const handleLogin = ({ _email, _password }) => {
     })
     .catch((err) => console.log(err));
 };
+
+export const handleLogout = () => {
+  localStorage.removeItem('token');
+};

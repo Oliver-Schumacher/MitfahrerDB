@@ -10,6 +10,8 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link, NavLink } from 'react-router-dom';
+import { Link as MuiLink } from '@mui/material';
+import { handleLogout } from '../../api/auth';
 import './Navigation.css';
 
 function Navigation() {
@@ -132,10 +134,10 @@ function Navigation() {
                   Profil
                 </NavLink>
               </MenuItem>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <NavLink className={'nav-link__mobile'} to={'/login '}>
+              <MenuItem onClick={handleLogout}>
+                <MuiLink className={'nav-link__mobile'} href={'/login '}>
                   Logout
-                </NavLink>
+                </MuiLink>
               </MenuItem>
             </Menu>
           </Box>
