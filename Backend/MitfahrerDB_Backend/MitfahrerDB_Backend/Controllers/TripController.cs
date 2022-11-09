@@ -1,5 +1,6 @@
 using System.Threading.Tasks.Dataflow;
 using Microsoft.AspNetCore.Mvc;
+using MitfahrerDB_Backend.Models;
 
 namespace MitfahrerDB_Backend.Controllers;
 
