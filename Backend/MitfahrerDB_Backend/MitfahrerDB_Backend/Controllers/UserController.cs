@@ -170,5 +170,13 @@ namespace MitfahrerDB_Backend.Controllers
             }
             return BadRequest("UserId was not found!");
         }
+
+        [HttpGet("/User/{id}/Trips")]
+        public IActionResult GetUserTrips(int id)
+        {
+            var trips = _db.Trips.Where(t => t.DriverId == id).ToList();
+            return Ok(trips);
+
+        }
     }
 }

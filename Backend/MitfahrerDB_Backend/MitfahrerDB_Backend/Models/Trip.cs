@@ -14,6 +14,8 @@ public class Trip
     public bool SameGender { get; set; }
     public int AvailableSeats { get; set; }
     
+    public string WeekDay { get; set; }
+    
     [ForeignKey("LocationStartId")]
     public virtual Location LocationStart { get; set; }
     

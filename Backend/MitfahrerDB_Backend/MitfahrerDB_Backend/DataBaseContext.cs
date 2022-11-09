@@ -30,13 +30,12 @@ public class DataBaseContext : DbContext
         modelBuilder.Entity<Trip>().Navigation(t => t.LocationStart).AutoInclude();
         modelBuilder.Entity<Trip>().Navigation(t => t.LocationEnd).AutoInclude();
         modelBuilder.Entity<Trip>().Navigation(t => t.Driver).AutoInclude();
-        
+
         //Eager Loading User
         modelBuilder.Entity<User>().Navigation(u => u.Gender).AutoInclude();
 
         //Eager Loading UserTrip
         modelBuilder.Entity<UserTrip>().Navigation(u => u.User).AutoInclude();
         modelBuilder.Entity<UserTrip>().Navigation(u => u.Trip).AutoInclude();
-
     }
 }
