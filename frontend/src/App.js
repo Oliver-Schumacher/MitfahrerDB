@@ -7,6 +7,7 @@ import Router from './components/Router/Router';
 
 function App() {
   const token = localStorage.getItem('token');
+
   return (
     <div className="App">
       {token && <Navigation />}

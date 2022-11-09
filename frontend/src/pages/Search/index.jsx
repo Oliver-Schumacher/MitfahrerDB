@@ -2,11 +2,7 @@ import React from 'react';
 import Map from '../../components/Map/Map';
 
 function Search() {
-  return (
-    <main>
-      <Map />
-    </main>
-  );
+  return <Map />;
 }
 
 export default Search;
