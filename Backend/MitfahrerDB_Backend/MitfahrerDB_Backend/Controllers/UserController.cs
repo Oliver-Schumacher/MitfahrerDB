@@ -20,11 +20,11 @@ namespace MitfahrerDB_Backend.Controllers
         }
 
         #region login
-        
+
         [NonAction]
         public JwtSecurityToken GenerateToken(string mail)
         {
-            var mySecret = "asdv234234^&%&^%&^hjsdfb2%%%";
+            var mySecret = "MitfahrerDB_Secret";
             var mySecurityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(mySecret));
 
             var myIssuer = "MitfahrerDB_Issuer";
@@ -99,7 +99,7 @@ namespace MitfahrerDB_Backend.Controllers
         {
             return _db.Genders.ToList();
         }
-        
+
         [HttpPost("Registration")]
         public IActionResult Post(string userName, string email, string password, int genderId)
         {
@@ -138,7 +138,7 @@ namespace MitfahrerDB_Backend.Controllers
 
             return (true, "");
         }
-        
+
         [NonAction]
         private (bool success, string message) CheckName(string name)
         {
@@ -149,17 +149,43 @@ namespace MitfahrerDB_Backend.Controllers
         }
         #endregion registration
 
-        [HttpGet("{UserId}")]
-        public User GetUser(int UserId)
+        [HttpGet("Profile{UserId}")]
+        public List<string> GetProfile(int UserId)
         {
-            User user = new User();
+            List<string> userInformation = new List<string>();
             if (UserId != null)
             {
-                user = _db.Users.FirstOrDefault(u => u.Id == UserId);
-                return user;
+                var user = _db.Users.FirstOrDefault(u => u.Id == UserId);
+                if (user != null)
+                {
+                    userInformation.Add("Name: " + user.Name.ToString());
+                    userInformation.Add("Mail: " + user.Mail.ToString());
+                    userInformation.Add("GenderId: " + user.GenderId.ToString());
+                    //userInformation.Add("Phonenumber:" + user.PhoneNumber.ToString());
+                }
             }
-            return user;
+            return userInformation;
         }
-
+        //[HttpPost("Profile/Update{UserId}{Name}{Mail}{GenderId}{Phonenumber}")]
+        //public IActionResult UpdateProfile(int userid, string name, string Mail, int GenderId, string phonenumber)
+        //{
+        //    if (userid != null)
+        //    {
+        //        var user = _db.Users.FirstOrDefault(u => u.Id == userid);
+        //        if (user != null)
+        //        {
+        //            if (name != String.Empty && user.Name != name)
+        //                user.Name = name;
+        //            if (Mail != String.Empty && user.Mail != Mail)
+        //                user.Mail = Mail;
+        //            if (GenderId != null && user.GenderId != GenderId)
+        //                user.GenderId = GenderId;
+        //            //if (phonenumber != String.Empty && user.phonenumber != phonenumber)
+        //            //    user.phonenumber = phonenumber;
+        //            return Ok();
+        //        }
+        //    }
+        //    return BadRequest();
+        //}
     }
 }
