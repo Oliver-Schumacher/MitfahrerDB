@@ -71,7 +71,7 @@ namespace MitfahrerDB_Backend.Controllers
         {
             if ((email != string.Empty && CheckMail(email).success) && (password != string.Empty))
             {
-                var user = _db.Users.FirstOrDefault(u => u.Mail.ToLower() == email.ToLower() && u.Passwort.ToLower() == password.ToLower());
+                User? user = _db.Users.FirstOrDefault(u => u.Mail.ToLower() == email.ToLower() && u.Passwort.ToLower() == password.ToLower());
                 if (user is not null)
                     return true;
             }
@@ -121,7 +121,7 @@ namespace MitfahrerDB_Backend.Controllers
         {
             if (!mailAddress.ToLower().EndsWith(emailServerExtension)) return (false, $"Mail must end with {emailServerExtension}.");
 
-            var user = _db.Users.FirstOrDefault(u => u.Mail.ToLower() == mailAddress.ToLower());
+            User? user = _db.Users.FirstOrDefault(u => u.Mail.ToLower() == mailAddress.ToLower());
             if (user is not null) return (false, $"Mail {mailAddress} Already exists.");
 
             return (true, "");
@@ -130,7 +130,7 @@ namespace MitfahrerDB_Backend.Controllers
         [NonAction]
         private (bool success, string message) CheckName(string name)
         {
-            var user = _db.Users.FirstOrDefault(u => u.Name.ToLower() == name.ToLower());
+            User? user = _db.Users.FirstOrDefault(u => u.Name.ToLower() == name.ToLower());
             if (user is not null) return (false, $"The User {name} already exists.");
 
             return (true, "");
@@ -141,17 +141,14 @@ namespace MitfahrerDB_Backend.Controllers
         public List<string> GetProfile(int UserId)
         {
             List<string> userInformation = new List<string>();
-            if (UserId != null)
+            var user = _db.Users.FirstOrDefault(u => u.Id == UserId);
+            if (user != null)
             {
-                var user = _db.Users.FirstOrDefault(u => u.Id == UserId);
-                if (user != null)
-                {
-                    userInformation.Add("UserId: " + user.Id.ToString());
-                    userInformation.Add("Name: " + user.Name.ToString());
-                    userInformation.Add("Mail: " + user.Mail.ToString());
-                    userInformation.Add("GenderId: " + user.GenderId.ToString());
-                    userInformation.Add("Phonenumber:" + user.Phone.ToString());
-                }
+                userInformation.Add("UserId: " + user.Id.ToString());
+                userInformation.Add("Name: " + user.Name?.ToString());
+                userInformation.Add("Mail: " + user.Mail?.ToString());
+                userInformation.Add("GenderId: " + user.GenderId.ToString());
+                userInformation.Add("Phonenumber:" + user.Phone?.ToString());
             }
             return userInformation;
         }
@@ -159,26 +156,23 @@ namespace MitfahrerDB_Backend.Controllers
         [HttpPost("Profile")]
         public IActionResult UpdateProfile(int UserId, string Name, string Mail, int GenderId, string Phone)
         {
-            if (UserId != null)
+            var user = _db.Users.FirstOrDefault(u => u.Id == UserId);
+            if (user != null)
             {
-                var user = _db.Users.FirstOrDefault(u => u.Id == UserId);
-                if (user != null)
-                {
-                    if (Name != String.Empty && user.Name != Name)
-                        user.Name = Name;
-                    if ((Mail != String.Empty && user.Mail != Mail) && (CheckMail(Mail).success))
-                        user.Mail = Mail;
-                    if (GenderId != null && user.GenderId != GenderId)
-                        user.GenderId = GenderId;
-                    if (Phone != String.Empty && user.Phone != Phone)
-                        user.Phone = Phone;
+                if (Name != String.Empty && user.Name != Name)
+                    user.Name = Name;
+                if ((Mail != String.Empty && user.Mail != Mail) && (CheckMail(Mail).success))
+                    user.Mail = Mail;
+                if (user.GenderId != GenderId)
+                    user.GenderId = GenderId;
+                if (Phone != String.Empty && user.Phone != Phone)
+                    user.Phone = Phone;
 
-                    _db.Users.Update(user);
-                    var updatedrows = _db.SaveChanges();
-                    if (updatedrows == 0) 
-                        return BadRequest("The user could not be updated!");
-                    return Ok();
-                }
+                _db.Users.Update(user);
+                var updatedrows = _db.SaveChanges();
+                if (updatedrows == 0)
+                    return BadRequest("The user could not be updated!");
+                return Ok();
             }
             return BadRequest("UserId was not found!");
         }
