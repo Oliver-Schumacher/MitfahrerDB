@@ -39,8 +39,9 @@ public class User
     public string Name { get; set; }
     public string Mail { get; set; }
     public string Passwort { get; set; }
+    public string Phone { get; set; }
     public int GenderId { get; set; }
-    
+
     [ForeignKey("GenderId")]
     public virtual Gender Gender { get; set; }
 }
