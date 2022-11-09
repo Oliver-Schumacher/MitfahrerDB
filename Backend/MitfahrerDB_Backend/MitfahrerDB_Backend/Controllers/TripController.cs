@@ -113,24 +113,25 @@ public class TripController : ControllerBase
     public IActionResult OnPut(string locStartLong, 
                                 string locStartLat, 
                                 string locEndLong, 
-                                string locEndLat, 
-                                int driverId, 
+                                string locEndLat,
                                 string startTime, 
                                 bool sameGender,
                                 int availableSeats,
                                 int id)
     {
-        
         var trip = _db.Trips.FirstOrDefault(t => t.Id == id);
         if (trip is null) return BadRequest($"The Trip {id} could not be found");
         
         var locationStart = GetLocation(locStartLat, locStartLong);
         var locationEnd = GetLocation(locEndLat, locEndLong);
+
+        trip.LocationStartId = locationStart.Id;
+        trip.LocationEndId = locationEnd.Id;
+        trip.StartTime = startTime;
+        trip.SameGender = sameGender;
+        trip.AvailableSeats = availableSeats;
         
-        var driverError = ValidateDriver(driverId);
-        if (!driverError.success) return BadRequest(driverError.message);
-        
-        return Ok();
+        return (_db.SaveChanges() != 0 ? Ok() : BadRequest($"Could not update trip {id}")); 
     }
 
 
