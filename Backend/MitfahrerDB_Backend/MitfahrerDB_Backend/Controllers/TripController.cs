@@ -1,5 +1,6 @@
 using System.Threading.Tasks.Dataflow;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MitfahrerDB_Backend.Models;
 
 namespace MitfahrerDB_Backend.Controllers;
@@ -20,7 +21,7 @@ public class TripController : ControllerBase
     [Route("/Trips")]
     public IActionResult Get()
     {
-        var trips = _db.Trips.Where(t => t.Id != 0);
+        var trips = _db.Trips.ToList();
         return Ok(trips);
     }
 
