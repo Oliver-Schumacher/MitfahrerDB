@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { handleLogin } from '../../../api/auth';
 
 const theme = createTheme();
@@ -17,11 +17,15 @@ const theme = createTheme();
 export default function Login() {
   const navigate = useNavigate();
 
+  const loginNavigation = () => {
+    navigate('/search');
+    window.location.reload();
+  };
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     handleLogin({ _email: data.get('email'), _password: data.get('password') });
-    setTimeout(navigate('/manage'), 2500);
+    setTimeout(() => loginNavigation(), 2000);
   };
 
   return (
@@ -67,7 +71,7 @@ export default function Login() {
             </Button>
             <Grid justifyContent="center" container>
               <Grid item>
-                <Link to="/SignUp">{'Du hast noch keinen Account? Registrieren'}</Link>
+                <Link to="/register">{'Du hast noch keinen Account? Registrieren'}</Link>
               </Grid>
             </Grid>
           </Box>
