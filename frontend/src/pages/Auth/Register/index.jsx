@@ -11,20 +11,21 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 const theme = createTheme();
 
 const genders = [
   {
-    value: 'male',
+    value: '1',
     label: 'Männlich'
   },
   {
-    value: 'female',
+    value: '2',
     label: 'Weiblich'
   },
   {
-    value: 'diverse',
+    value: '3',
     label: 'Divers'
   }
 ];
@@ -40,10 +41,18 @@ export default function Register() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    // console.log({
+    //   email: data.get('email'),
+    //   password: data.get('password'),
+    //   gender: data.get('gender')
+    // });
+    // console.log(document.getElementById('gender'));
+    axios.post('https://localhost:7200/User/Registration', {
+      userName: data.get('username'),
       email: data.get('email'),
       password: data.get('password'),
-      gender: data.get('gender')
+      phone: data.get('mobile'),
+      genderId: data.get('gender')
     });
   };
 
@@ -66,26 +75,8 @@ export default function Register() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="Vorname"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Nachname"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
+              <Grid item xs={12}>
+                <TextField required fullWidth id="username" label="Username" name="username" />
               </Grid>
               <Grid item xs={12}>
                 <TextField
