@@ -90,7 +90,7 @@ namespace MitfahrerDB_Backend.Controllers
         }
 
         [HttpPost("Registration")]
-        public IActionResult Post(string userName, string email, string password, int genderId, string phone)
+        public IActionResult Post(string userName, string email, string password, int genderId, string? phone)
         {
             var userResult = CheckName(userName);
             if (!userResult.success)
@@ -148,7 +148,7 @@ namespace MitfahrerDB_Backend.Controllers
         }
 
         [HttpPost("Profile")]
-        public IActionResult UpdateProfile(int UserId, string Name, string Mail, int GenderId, string Phone)
+        public IActionResult UpdateProfile(int UserId, string Name, string Mail, int GenderId, string? Phone)
         {
             var user = _db.Users.FirstOrDefault(u => u.Id == UserId);
             if (user != null)
