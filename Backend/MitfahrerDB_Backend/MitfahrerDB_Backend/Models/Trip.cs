@@ -10,7 +10,7 @@ public class Trip
     public int LocationStartId { get; set; }
     public int LocationEndId { get; set; }
     public int DriverId { get; set; }
-    public string StartTime { get; set; }
+    public int Lesson { get; set; }
     public bool SameGender { get; set; }
     public int AvailableSeats { get; set; }
     public string Address { get; set; }
