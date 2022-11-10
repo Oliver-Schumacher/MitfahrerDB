@@ -234,7 +234,6 @@ namespace MitfahrerDB_Backend.Controllers
         {
             var trips = _db.Trips.Where(t => t.DriverId == id).ToList();
             return Ok(trips);
-
         }
     }
 }
