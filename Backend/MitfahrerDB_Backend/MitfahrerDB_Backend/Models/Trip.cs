@@ -15,7 +15,7 @@ public class Trip
     public int AvailableSeats { get; set; }
     public string Address { get; set; }
     public string WeekDay { get; set; }
-    public int ToGSO { get; set; }
+    public bool ToGSO { get; set; }
     
     [ForeignKey("LocationStartId")]
     public virtual Location LocationStart { get; set; }
