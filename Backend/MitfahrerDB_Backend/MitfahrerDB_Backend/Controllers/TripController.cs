@@ -21,7 +21,7 @@ public class TripController : ControllerBase
     [Route("/Trips")]
     public IActionResult Get()
     {
-        var trips = _db.Trips?.ToList();
+        var trips = _db.Trips.ToList();
         return Ok(trips);
     }
 
@@ -43,7 +43,7 @@ public class TripController : ControllerBase
                             int driverId, 
                             string startTime, 
                             string weekday,
-                            int ToGSO,
+                            bool ToGSO,
                             bool sameGender,
                             int availableSeats)
     {
@@ -116,7 +116,7 @@ public class TripController : ControllerBase
                                 int availableSeats,
                                 string address,
                                 string weekDay,
-                                int ToGSO,
+                                bool ToGSO,
                                 int id)
     {
         var trip = _db.Trips.FirstOrDefault(t => t.Id == id);
