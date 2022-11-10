@@ -112,7 +112,6 @@ namespace MitfahrerDB_Backend.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Phone")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
