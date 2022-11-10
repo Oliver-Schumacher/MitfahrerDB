@@ -60,7 +60,7 @@ namespace MitfahrerDB_Backend.Controllers
         /// <param name="loginUser"></param>
         /// <returns></returns>
         [HttpPost("Login")]
-        public IActionResult UserLogin([FromBody]User? _User)
+        public IActionResult UserLogin([FromBody]UserBody? _User)
         {
             if (VerifyUser(_User.Mail, _User.Passwort))
             {
@@ -109,7 +109,7 @@ namespace MitfahrerDB_Backend.Controllers
         /// <param name="phone"></param>
         /// <returns></returns>
         [HttpPost("Registration")]
-        public IActionResult Post([FromBody]User? _newUser)
+        public IActionResult Post([FromBody]UserBody? _newUser)
         {
             var userResult = CheckName(_newUser.Name);
             if (!userResult.success)
