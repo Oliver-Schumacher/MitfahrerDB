@@ -6,7 +6,7 @@ const setAuthToken = (token) => {
   } else delete axios.defaults.headers.common['Authorization'];
 };
 
-export const handleLogin = ({ _email, _password }) => {
+export async function handleLogin({ _email, _password }) {
   //reqres registered sample user
   const loginPayload = {
     email: _email,
@@ -26,7 +26,7 @@ export const handleLogin = ({ _email, _password }) => {
       setAuthToken(token);
     })
     .catch((err) => console.log(err));
-};
+}
 
 export const handleLogout = () => {
   localStorage.removeItem('token');

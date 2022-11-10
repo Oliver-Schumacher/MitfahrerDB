@@ -2,16 +2,20 @@ import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import './Map.css';
 import * as L from 'leaflet';
-
+import axios from 'axios';
 import LocationMarker from './LocationMarker';
 import SearchControl from './SearchControl';
 
 function Map() {
   const [position, setPosition] = React.useState(null);
+  const [myTrips, setMyTrips] = React.useState([]);
 
   const getPosition = (_position) => {
-    console.log(_position);
     setPosition(_position);
+  };
+
+  const getMyTrips = (_trips) => {
+    setMyTrips(_trips);
   };
 
   const redIcon = new L.Icon({
@@ -24,9 +28,11 @@ function Map() {
     shadowSize: [41, 41]
   });
 
+  console.log('myTrips', myTrips);
+
   return (
     <>
-      <SearchControl getPosition={getPosition} />
+      <SearchControl getTrips={getMyTrips} getPosition={getPosition} />
       <MapContainer className={'map'} center={[50.9274158, 6.9961041]} zoom={13}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -35,6 +41,19 @@ function Map() {
         <Marker icon={redIcon} position={[50.9274158, 6.9961041]}>
           <Popup>Georg-Simon-Ohm Berufskolleg</Popup>
         </Marker>
+        {!!myTrips &&
+          myTrips.map((trip) => {
+            return (
+              <Marker
+                key={trip.id}
+                position={[
+                  parseInt(trip.locationStart.longitude),
+                  parseInt(trip.locationStart.latitude)
+                ]}>
+                <Popup>{trip.driver.mail}</Popup>
+              </Marker>
+            );
+          })}
         {!!position && <LocationMarker position={position} />}
       </MapContainer>
     </>
