@@ -48,11 +48,11 @@ export default function Register() {
     // });
     // console.log(document.getElementById('gender'));
     axios.post('https://localhost:7200/User/Registration', {
-      userName: data.get('username'),
-      email: data.get('email'),
-      password: data.get('password'),
-      phone: data.get('mobile'),
-      genderId: data.get('gender')
+      Name: data.get('username'),
+      Mail: data.get('email'),
+      Passwort: data.get('password'),
+      Phone: data.get('mobile'),
+      GenderId: data.get('gender')
     });
   };
 
