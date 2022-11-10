@@ -2,7 +2,6 @@ import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import './Map.css';
 import * as L from 'leaflet';
-import axios from 'axios';
 import LocationMarker from './LocationMarker';
 import SearchControl from './SearchControl';
 
