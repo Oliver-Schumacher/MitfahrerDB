@@ -23,6 +23,11 @@ namespace MitfahrerDB_Backend.Controllers
 
         #region login
 
+        /// <summary>
+        /// Generiert und liefert einen JwtSecurityToken zurück. 
+        /// </summary>
+        /// <param name="mail"></param>
+        /// <returns></returns>
         [NonAction]
         public JwtSecurityToken GenerateToken(string mail)
         {
@@ -83,12 +88,25 @@ namespace MitfahrerDB_Backend.Controllers
 
         #region registration
 
+        /// <summary>
+        /// Liefert eine Liste der Genders zurück. 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("Registration")]
         public List<Gender> Get()
         {
             return _db.Genders.ToList();
         }
 
+        /// <summary>
+        /// Methode zum Anlegen eines neuen Users in der Datenbank, falls die eingegebenen Daten Vollständig und noch nicht verwendet werden. 
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <param name="genderId"></param>
+        /// <param name="phone"></param>
+        /// <returns></returns>
         [HttpPost("Registration")]
         public IActionResult Post(string userName, string email, string password, int genderId, string phone)
         {
@@ -118,6 +136,11 @@ namespace MitfahrerDB_Backend.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Prüfe die angegebene E-Mail-Adresse darauf, ob es eine Schul E-Mail-Adresse ist.
+        /// </summary>
+        /// <param name="mailAddress"></param>
+        /// <returns></returns>
         [NonAction]
         private (bool success, string message) CheckMail(string mailAddress)
         {
@@ -129,6 +152,11 @@ namespace MitfahrerDB_Backend.Controllers
             return (true, "");
         }
 
+        /// <summary>
+        /// Überprüft ob der Name, des Users schon in Verwendung ist.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         [NonAction]
         private (bool success, string message) CheckName(string name)
         {
@@ -139,6 +167,11 @@ namespace MitfahrerDB_Backend.Controllers
         }
         #endregion registration
 
+        /// <summary>
+        /// Liefert ein User Profil zurück, anhand der übergebenen UserId 
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
         [HttpGet("Profile")]
         public IActionResult GetProfile(int UserId)
         {
@@ -147,6 +180,15 @@ namespace MitfahrerDB_Backend.Controllers
             return Ok(user);
         }
 
+        /// <summary>
+        /// Updated das User Profil anhand der neu angegeben Daten, vorrausgesetzt diese sind Valide. 
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="Name"></param>
+        /// <param name="Mail"></param>
+        /// <param name="GenderId"></param>
+        /// <param name="Phone"></param>
+        /// <returns></returns>
         [HttpPost("Profile")]
         public IActionResult UpdateProfile(int UserId, string Name, string Mail, int GenderId, string Phone)
         {
