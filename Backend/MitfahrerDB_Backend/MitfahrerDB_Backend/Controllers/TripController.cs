@@ -21,7 +21,7 @@ public class TripController : ControllerBase
     [Route("/Trips")]
     public IActionResult Get()
     {
-        var trips = _db.Trips.ToList();
+        var trips = _db.Trips?.ToList();
         return Ok(trips);
     }
 
@@ -39,10 +39,11 @@ public class TripController : ControllerBase
                             string locStartLat, 
                             string locEndLong, 
                             string locEndLat,
-                            string adress,
+                            string address,
                             int driverId, 
                             string startTime, 
                             string weekday,
+                            int ToGSO,
                             bool sameGender,
                             int availableSeats)
     {
@@ -57,10 +58,11 @@ public class TripController : ControllerBase
             LocationStartId = locationStart.Id,
             LocationEndId = locationEnd.Id,
             DriverId = driverId,
-            Adress = adress,
+            Address = address,
             StartTime = startTime,
             SameGender = sameGender,
             WeekDay = weekday,
+            ToGSO = ToGSO,
             AvailableSeats = availableSeats
         };
         _db.Trips.Add(trip);
@@ -112,7 +114,9 @@ public class TripController : ControllerBase
                                 string startTime, 
                                 bool sameGender,
                                 int availableSeats,
-                                string adress,
+                                string address,
+                                string weekDay,
+                                int ToGSO,
                                 int id)
     {
         var trip = _db.Trips.FirstOrDefault(t => t.Id == id);
@@ -126,7 +130,9 @@ public class TripController : ControllerBase
         trip.StartTime = startTime;
         trip.SameGender = sameGender;
         trip.AvailableSeats = availableSeats;
-        trip.Adress = adress;
+        trip.Address = address;
+        trip.WeekDay = weekDay;
+        trip.ToGSO = ToGSO;
         
         return (_db.SaveChanges() != 0 ? Ok(trip) : BadRequest($"Could not update trip {id}")); 
     }

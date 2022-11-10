@@ -13,9 +13,9 @@ public class Trip
     public string StartTime { get; set; }
     public bool SameGender { get; set; }
     public int AvailableSeats { get; set; }
-    public string Adress { get; set; }
-    
+    public string Address { get; set; }
     public string WeekDay { get; set; }
+    public int ToGSO { get; set; }
     
     [ForeignKey("LocationStartId")]
     public virtual Location LocationStart { get; set; }
