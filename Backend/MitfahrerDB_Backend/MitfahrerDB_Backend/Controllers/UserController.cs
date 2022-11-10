@@ -108,7 +108,7 @@ namespace MitfahrerDB_Backend.Controllers
         /// <param name="phone"></param>
         /// <returns></returns>
         [HttpPost("Registration")]
-        public IActionResult Post(string userName, string email, string password, int genderId, string phone)
+        public IActionResult Post(string userName, string email, string password, int genderId, string? phone)
         {
             var userResult = CheckName(userName);
             if (!userResult.success)
@@ -190,7 +190,7 @@ namespace MitfahrerDB_Backend.Controllers
         /// <param name="Phone"></param>
         /// <returns></returns>
         [HttpPost("Profile")]
-        public IActionResult UpdateProfile(int UserId, string Name, string Mail, int GenderId, string Phone)
+        public IActionResult UpdateProfile(int UserId, string Name, string Mail, int GenderId, string? Phone)
         {
             var user = _db.Users.FirstOrDefault(u => u.Id == UserId);
             if (user != null)
@@ -211,6 +211,14 @@ namespace MitfahrerDB_Backend.Controllers
                 return Ok("User saved");
             }
             return BadRequest("UserId was not found!");
+        }
+
+        [HttpGet("/User/{id}/Trips")]
+        public IActionResult GetUserTrips(int id)
+        {
+            var trips = _db.Trips.Where(t => t.DriverId == id).ToList();
+            return Ok(trips);
+
         }
     }
 }
