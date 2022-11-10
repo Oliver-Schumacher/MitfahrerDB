@@ -2,6 +2,7 @@ using System.Threading.Tasks.Dataflow;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MitfahrerDB_Backend.Models;
+using MitfahrerDB_Backend.RequestBodys;
 
 namespace MitfahrerDB_Backend.Controllers;
 
@@ -35,35 +36,25 @@ public class TripController : ControllerBase
     }
 
     [HttpPost]
-    public ActionResult Post(string locStartLong, 
-                            string locStartLat, 
-                            string locEndLong, 
-                            string locEndLat,
-                            string address,
-                            int driverId, 
-                            string startTime, 
-                            string weekday,
-                            bool ToGSO,
-                            bool sameGender,
-                            int availableSeats)
+    public ActionResult Post([FromBody]TripBody tripBody)
     {
-        var driverError = ValidateDriver(driverId);
+        var driverError = ValidateDriver(tripBody.DriverId);
         if (!driverError.success) return BadRequest(driverError.message);
 
-        var locationStart = GetLocation(locStartLat, locStartLong);
-        var locationEnd = GetLocation(locEndLat, locEndLong);
+        var locationStart = GetLocation(tripBody.LocationStartLat, tripBody.LocationStartLon);
+        var locationEnd = GetLocation(tripBody.LocationEndLat, tripBody.LocationEndLon);
 
         var trip = new Trip()
         {
             LocationStartId = locationStart.Id,
             LocationEndId = locationEnd.Id,
-            DriverId = driverId,
-            Address = address,
-            StartTime = startTime,
-            SameGender = sameGender,
-            WeekDay = weekday,
-            ToGSO = ToGSO,
-            AvailableSeats = availableSeats
+            DriverId = tripBody.DriverId,
+            Address = tripBody.Address,
+            Lesson = tripBody.Lesson,
+            SameGender = tripBody.SameGender,
+            WeekDay = tripBody.WeekDay,
+            ToGSO = tripBody.ToGSO,
+            AvailableSeats = tripBody.AvailableSeats
         };
         _db.Trips.Add(trip);
         _db.SaveChanges();
@@ -107,32 +98,23 @@ public class TripController : ControllerBase
 
     [HttpPut]
     [Route("/Trip/{id}")]
-    public IActionResult OnPut(string locStartLong, 
-                                string locStartLat, 
-                                string locEndLong, 
-                                string locEndLat,
-                                string startTime, 
-                                bool sameGender,
-                                int availableSeats,
-                                string address,
-                                string weekDay,
-                                bool ToGSO,
-                                int id)
+    public IActionResult OnPut([FromBody] TripBody tripBody, int id)
     {
         var trip = _db.Trips.FirstOrDefault(t => t.Id == id);
         if (trip is null) return BadRequest($"The Trip {id} could not be found");
         
-        var locationStart = GetLocation(locStartLat, locStartLong);
-        var locationEnd = GetLocation(locEndLat, locEndLong);
+        var locationStart = GetLocation(tripBody.LocationStartLat, tripBody.LocationStartLon);
+        var locationEnd = GetLocation(tripBody.LocationEndLat, tripBody.LocationEndLon);
+
 
         trip.LocationStartId = locationStart.Id;
         trip.LocationEndId = locationEnd.Id;
-        trip.StartTime = startTime;
-        trip.SameGender = sameGender;
-        trip.AvailableSeats = availableSeats;
-        trip.Address = address;
-        trip.WeekDay = weekDay;
-        trip.ToGSO = ToGSO;
+        trip.Lesson = tripBody.Lesson;
+        trip.SameGender = tripBody.SameGender;
+        trip.AvailableSeats = tripBody.AvailableSeats;
+        trip.Address = tripBody.Address;
+        trip.WeekDay = tripBody.WeekDay;
+        trip.ToGSO = tripBody.ToGSO;
         
         return (_db.SaveChanges() != 0 ? Ok(trip) : BadRequest($"Could not update trip {id}")); 
     }
