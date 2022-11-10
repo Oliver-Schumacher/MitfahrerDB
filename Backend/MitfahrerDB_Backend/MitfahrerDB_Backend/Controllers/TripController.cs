@@ -38,9 +38,11 @@ public class TripController : ControllerBase
     public ActionResult Post(string locStartLong, 
                             string locStartLat, 
                             string locEndLong, 
-                            string locEndLat, 
+                            string locEndLat,
+                            string adress,
                             int driverId, 
                             string startTime, 
+                            string weekday,
                             bool sameGender,
                             int availableSeats)
     {
@@ -49,14 +51,16 @@ public class TripController : ControllerBase
 
         var locationStart = GetLocation(locStartLat, locStartLong);
         var locationEnd = GetLocation(locEndLat, locEndLong);
-        
+
         var trip = new Trip()
         {
             LocationStartId = locationStart.Id,
             LocationEndId = locationEnd.Id,
             DriverId = driverId,
+            Adress = adress,
             StartTime = startTime,
             SameGender = sameGender,
+            WeekDay = weekday,
             AvailableSeats = availableSeats
         };
         _db.Trips.Add(trip);
@@ -108,6 +112,7 @@ public class TripController : ControllerBase
                                 string startTime, 
                                 bool sameGender,
                                 int availableSeats,
+                                string adress,
                                 int id)
     {
         var trip = _db.Trips.FirstOrDefault(t => t.Id == id);
@@ -121,6 +126,7 @@ public class TripController : ControllerBase
         trip.StartTime = startTime;
         trip.SameGender = sameGender;
         trip.AvailableSeats = availableSeats;
+        trip.Adress = adress;
         
         return (_db.SaveChanges() != 0 ? Ok(trip) : BadRequest($"Could not update trip {id}")); 
     }

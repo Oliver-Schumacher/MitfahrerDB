@@ -75,7 +75,7 @@ namespace MitfahrerDB_Backend.Controllers
         [NonAction]
         private bool VerifyUser(string email, string password)
         {
-            if ((email != string.Empty && CheckMail(email).success) && (password != string.Empty))
+            if ((email != string.Empty && VerifyMail(email).success) && (password != string.Empty))
             {
                 User? user = _db.Users.FirstOrDefault(u => u.Mail.ToLower() == email.ToLower() && u.Passwort.ToLower() == password.ToLower());
                 if (user is not null)
@@ -137,7 +137,7 @@ namespace MitfahrerDB_Backend.Controllers
         }
 
         /// <summary>
-        /// Prüfe die angegebene E-Mail-Adresse darauf, ob es eine Schul E-Mail-Adresse ist.
+        /// Überprüft ob die angegebene Mail schon in verwendung ist.
         /// </summary>
         /// <param name="mailAddress"></param>
         /// <returns></returns>
@@ -152,6 +152,21 @@ namespace MitfahrerDB_Backend.Controllers
             return (true, "");
         }
 
+        /// <summary>
+        /// Überprüft ob die angegebene Mail eine Valide E-Mail zu einem User ist.
+        /// </summary>
+        /// <param name="mailAdress"></param>
+        /// <returns></returns>
+        [NonAction]
+        private (bool success, string message) VerifyMail(string mailAdress)
+        {
+            if (!mailAdress.ToLower().EndsWith(emailServerExtension)) 
+                return (false, $"Mail must end with {emailServerExtension}");
+            User? user = _db.Users.FirstOrDefault(u => u.Mail.ToLower() == mailAdress.ToLower());
+            if (user is null)
+                return (false, "User not found!");
+            return (true, "");
+        }
         /// <summary>
         /// Überprüft ob der Name, des Users schon in Verwendung ist.
         /// </summary>
