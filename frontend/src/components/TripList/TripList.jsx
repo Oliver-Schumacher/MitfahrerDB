@@ -148,7 +148,7 @@ function TripList() {
       )
       .then((response) => {
         const address = response.data.features[0].center;
-        console.log(address);
+
         setNewTrip({
           ...newTrip,
           LocationStartLon: address[0],
@@ -156,7 +156,7 @@ function TripList() {
           LocationEndLon: address[0],
           LocationEndLat: address[1]
         });
-        console.log(newTrip);
+
         axios
           .put(`https://localhost:7200/Trip/${isEditingId}`, {
             LocationStartLon: newTrip.locationStart.longitude,
@@ -202,7 +202,7 @@ function TripList() {
       )
       .then((response) => {
         const address = response.data.features[0].center;
-        console.log(response);
+
         const tripToAdd = {
           ...newTrip,
           LocationStartLon: address[0],
@@ -210,7 +210,7 @@ function TripList() {
           LocationEndLon: address[0],
           LocationEndLat: address[1]
         };
-        console.log(tripToAdd);
+
         axios
           .post('https://localhost:7200/Trip', {
             DriverId: 1,

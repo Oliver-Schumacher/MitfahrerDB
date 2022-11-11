@@ -27,8 +27,6 @@ function Map() {
     shadowSize: [41, 41]
   });
 
-  console.log('myTrips', myTrips);
-
   return (
     <>
       <SearchControl getTrips={getMyTrips} getPosition={getPosition} />
