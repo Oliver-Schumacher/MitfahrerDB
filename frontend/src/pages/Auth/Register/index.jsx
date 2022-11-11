@@ -10,7 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 
 const theme = createTheme();
@@ -32,6 +32,7 @@ const genders = [
 
 export default function Register() {
   const [gender, setGender] = React.useState('');
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     setGender(event.target.value);
@@ -41,19 +42,18 @@ export default function Register() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // console.log({
-    //   email: data.get('email'),
-    //   password: data.get('password'),
-    //   gender: data.get('gender')
-    // });
-    // console.log(document.getElementById('gender'));
-    axios.post('https://localhost:7200/User/Registration', {
-      Name: data.get('username'),
-      Mail: data.get('email'),
-      Passwort: data.get('password'),
-      Phone: data.get('mobile'),
-      GenderId: data.get('gender')
-    });
+    axios
+      .post('https://localhost:7200/User/Registration', {
+        Name: data.get('username'),
+        Mail: data.get('email'),
+        Passwort: data.get('password'),
+        Phone: data.get('mobile'),
+        GenderId: data.get('gender')
+      })
+      .then((res) => {
+        navigate('/login');
+        console.log(res);
+      });
   };
 
   return (
@@ -125,7 +125,7 @@ export default function Register() {
             </Button>
             <Grid container justifyContent="center">
               <Grid item>
-                <Link to="/SignIn">Du hast schon einen Account? Login</Link>
+                <Link to="/login">Du hast schon einen Account? Login</Link>
               </Grid>
             </Grid>
           </Box>

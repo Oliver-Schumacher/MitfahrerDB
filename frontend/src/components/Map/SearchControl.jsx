@@ -9,29 +9,13 @@ import {
   InputLabel,
   Box,
   FormControl,
-  OutlinedInput
+  OutlinedInput,
+  FormGroup,
+  Switch
 } from '@mui/material';
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import axios from 'axios';
 
 const SearchControl = (props) => {
-  const [values, setValues] = React.useState({
-    street: '',
-    postal: '',
-    city: '',
-    hour: '',
-    rideType: '',
-    date: null
-  });
-
-  const [position, setPosition] = React.useState([]);
-
-  React.useEffect(() => {
-    props.getPosition(position);
-  }, [position]);
-
   const hours = [
     {
       value: '1',
@@ -82,6 +66,35 @@ const SearchControl = (props) => {
       label: '12'
     }
   ];
+  const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
+  const [values, setValues] = React.useState({
+    street: '',
+    postal: '',
+    city: '',
+    hour: '',
+    rideType: 'Hinfahrt',
+    weekDay: '',
+    sameGender: false
+  });
+  const [position, setPosition] = React.useState([]);
+  const [trips, setTrips] = React.useState([]);
+  const [filteredTrips, setFilteredTrips] = React.useState([]);
+
+  React.useEffect(() => {
+    axios.get(`https://localhost:7200/Trips`).then((res) => {
+      console.log(res.data);
+      const response = res.data;
+      setTrips(response);
+    });
+  }, []);
+
+  React.useEffect(() => {
+    props.getPosition(position);
+  }, [position]);
+
+  React.useEffect(() => {
+    props.getTrips(filteredTrips);
+  }, [filteredTrips]);
 
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
@@ -92,6 +105,18 @@ const SearchControl = (props) => {
 
     const address = `${values.street} ${values.postal} ${values.city}`;
 
+    console.log(trips);
+
+    const newArr = trips.filter(
+      (trip) =>
+        trip.sameGender === values.sameGender &&
+        trip.weekDay === values.weekDay &&
+        trip.lesson == values.hour
+    );
+
+    setFilteredTrips(newArr);
+    console.log(newArr);
+
     const access_token =
       'pk.eyJ1IjoiZmFkZTEzMDkiLCJhIjoiY2xhOWVkbTh5MGRpMTNxcW9oeWN5NGxoYyJ9.POjmItIyWziDT51NqsYohg';
 
@@ -100,7 +125,7 @@ const SearchControl = (props) => {
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?country=de&limit=3&proximity=ip&types=place&language=de&access_token=${access_token}`
       )
       .then((response) => {
-        setPosition(response.data.features[0].center);
+        setPosition(response?.data?.features[0]?.center);
       })
       .catch((error) => {
         console.log(error);
@@ -130,17 +155,33 @@ const SearchControl = (props) => {
           <FormControlLabel value="Rückfahrt" control={<Radio />} label="Rückfahrt" />
         </RadioGroup>
       </FormControl>
-      <LocalizationProvider dateAdapter={AdapterMoment}>
-        <DatePicker
-          inputFormat="DD/MM/yyyy"
-          label="Datum"
-          value={values.date}
-          onChange={(newValue) => {
-            setValues({ ...values, date: newValue.format() });
-          }}
-          renderInput={(params) => <TextField {...params} />}
+      <FormGroup>
+        <FormControlLabel
+          labelPlacement="top"
+          control={
+            <Switch
+              onChange={(event) => setValues({ ...values, sameGender: event.target.checked })}
+              value={values.sameGender}
+            />
+          }
+          label="Nur gleiches Geschlecht"
         />
-      </LocalizationProvider>
+      </FormGroup>
+
+      <TextField
+        sx={{ minWidth: 140 }}
+        id="weekday"
+        select
+        label="Wochentag"
+        name="weekday"
+        value={values.weekDay}
+        onChange={handleChange('weekDay')}>
+        {weekdays.map((weekday) => (
+          <MenuItem key={weekday} value={weekday}>
+            {weekday}
+          </MenuItem>
+        ))}
+      </TextField>
       <TextField
         sx={{ minWidth: 90 }}
         id="hour"
