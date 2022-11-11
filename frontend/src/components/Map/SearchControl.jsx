@@ -72,7 +72,7 @@ const SearchControl = (props) => {
     postal: '',
     city: '',
     hour: '',
-    rideType: '',
+    rideType: 'Hinfahrt',
     weekDay: '',
     sameGender: false
   });
@@ -82,6 +82,7 @@ const SearchControl = (props) => {
 
   React.useEffect(() => {
     axios.get(`https://localhost:7200/Trips`).then((res) => {
+      console.log(res.data);
       const response = res.data;
       setTrips(response);
     });
@@ -118,7 +119,7 @@ const SearchControl = (props) => {
         `https://api.mapbox.com/geocoding/v5/mapbox.places/${address}.json?country=de&limit=3&proximity=ip&types=place&language=de&access_token=${access_token}`
       )
       .then((response) => {
-        setPosition(response.data.features[0].center);
+        setPosition(response?.data?.features[0]?.center);
       })
       .catch((error) => {
         console.log(error);

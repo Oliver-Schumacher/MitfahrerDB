@@ -46,8 +46,8 @@ function Map() {
               <Marker
                 key={trip.id}
                 position={[
-                  parseInt(trip.locationStart.longitude),
-                  parseInt(trip.locationStart.latitude)
+                  parseInt(trip.locationStart.latitude),
+                  parseInt(trip.locationStart.longitude)
                 ]}>
                 <Popup>{trip.driver.mail}</Popup>
               </Marker>
