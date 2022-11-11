@@ -64,7 +64,8 @@ namespace MitfahrerDB_Backend.Controllers
         {
             if (VerifyUser(_User.Mail, _User.Passwort))
             {
-                return Ok(GenerateToken(_User.Mail));
+                User? user = _db.Users.FirstOrDefault(u => u.Mail.ToLower() == _User.Mail.ToLower() && u.Passwort.ToLower() == _User.Passwort.ToLower());
+                return Ok(user);
             }
             return BadRequest("Login failed!");
         }
