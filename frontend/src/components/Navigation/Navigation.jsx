@@ -129,11 +129,6 @@ function Navigation() {
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}>
-              <MenuItem onClick={handleCloseUserMenu}>
-                <NavLink className={'nav-link__mobile'} to={'/profile'}>
-                  Profil
-                </NavLink>
-              </MenuItem>
               <MenuItem onClick={handleLogout}>
                 <MuiLink className={'nav-link__mobile'} href={'/login '}>
                   Logout

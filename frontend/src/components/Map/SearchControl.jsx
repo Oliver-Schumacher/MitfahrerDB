@@ -105,11 +105,17 @@ const SearchControl = (props) => {
 
     const address = `${values.street} ${values.postal} ${values.city}`;
 
+    console.log(trips);
+
     const newArr = trips.filter(
-      (trip) => trip.sameGender === values.sameGender && trip.weekDay === values.weekDay
+      (trip) =>
+        trip.sameGender === values.sameGender &&
+        trip.weekDay === values.weekDay &&
+        trip.lesson == values.hour
     );
 
     setFilteredTrips(newArr);
+    console.log(newArr);
 
     const access_token =
       'pk.eyJ1IjoiZmFkZTEzMDkiLCJhIjoiY2xhOWVkbTh5MGRpMTNxcW9oeWN5NGxoYyJ9.POjmItIyWziDT51NqsYohg';

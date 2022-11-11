@@ -46,11 +46,12 @@ function TripList() {
     availableSeats: 0
   });
 
+  const [userId, setUserId] = React.useState(1);
   const weekdays = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag'];
   const hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
   React.useEffect(() => {
-    axios.get(`https://localhost:7200/Trips`).then((res) => {
+    axios.get(`https://localhost:7200/User/${userId}/Trips`).then((res) => {
       const response = res.data;
       setTrips(response);
     });

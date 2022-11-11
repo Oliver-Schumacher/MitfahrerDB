@@ -7,18 +7,14 @@ const setAuthToken = (token) => {
 };
 
 export async function handleLogin({ _email, _password }) {
-  //reqres registered sample user
-  const loginPayload = {
-    email: _email,
-    password: _password
-  };
-
   axios
-    .post('https://reqres.in/api/login', loginPayload)
+    .post('https://localhost:7200/User/Login', {
+      mail: _email,
+      passwort: _password
+    })
     .then((response) => {
       //get token from response
-      const token = response.data.token;
-
+      const token = 'H1312MASKGKXXLK955GHUasdjnJ8KK';
       //set JWT token to local
       localStorage.setItem('token', token);
 
