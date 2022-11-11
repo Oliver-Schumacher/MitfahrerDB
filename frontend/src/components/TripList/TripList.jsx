@@ -63,7 +63,6 @@ function TripList() {
   const handleClose = () => {
     setOpen(false);
     setTimeout(() => window.location.reload(), 1000);
-    c;
   };
 
   const handleWeekdayChange = (event) => {
