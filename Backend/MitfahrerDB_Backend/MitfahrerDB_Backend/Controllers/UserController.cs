@@ -111,6 +111,8 @@ namespace MitfahrerDB_Backend.Controllers
         [HttpPost("Registration")]
         public IActionResult Post([FromBody]UserBody? _newUser)
         {
+            if (_newUser.Name is null || _newUser.Name == String.Empty)
+                return BadRequest("User Name is required.");
             var userResult = CheckName(_newUser.Name);
             if (!userResult.success)
             {
@@ -176,6 +178,8 @@ namespace MitfahrerDB_Backend.Controllers
         [NonAction]
         private (bool success, string message) CheckName(string name)
         {
+            if (name is null || name == String.Empty)
+                return (false, "Name is required!");
             User? user = _db.Users.FirstOrDefault(u => u.Name.ToLower() == name.ToLower());
             if (user is not null) return (false, $"The User {name} already exists.");
 

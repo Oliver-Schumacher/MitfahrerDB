@@ -40,6 +40,16 @@ public class TripController : ControllerBase
     {
         var driverError = ValidateDriver(tripBody.DriverId);
         if (!driverError.success) return BadRequest(driverError.message);
+        
+        //At a post the Coordinates are required!.
+        if (tripBody.LocationStartLat == null || tripBody.LocationStartLat == String.Empty)
+            return BadRequest("LocationStartLat is required!");
+        if (tripBody.LocationStartLon == null || tripBody.LocationStartLon == String.Empty)
+            return BadRequest("LocationStartLon is required!");
+        if (tripBody.LocationEndLat == null || tripBody.LocationEndLat == String.Empty)
+            return BadRequest("LocationEndLat is required!");
+        if (tripBody.LocationEndLon == null || tripBody.LocationEndLon == String.Empty)
+            return BadRequest("LocationEndLon is required!");
 
         var locationStart = GetLocation(tripBody.LocationStartLat, tripBody.LocationStartLon);
         var locationEnd = GetLocation(tripBody.LocationEndLat, tripBody.LocationEndLon);
@@ -102,13 +112,17 @@ public class TripController : ControllerBase
     {
         var trip = _db.Trips.FirstOrDefault(t => t.Id == id);
         if (trip is null) return BadRequest($"The Trip {id} could not be found");
-        
-        var locationStart = GetLocation(tripBody.LocationStartLat, tripBody.LocationStartLon);
-        var locationEnd = GetLocation(tripBody.LocationEndLat, tripBody.LocationEndLon);
 
-
-        trip.LocationStartId = locationStart.Id;
-        trip.LocationEndId = locationEnd.Id;
+        if ((tripBody.LocationEndLat != null && tripBody.LocationEndLat != String.Empty) && (tripBody.LocationEndLon != null && tripBody.LocationEndLon != String.Empty))
+        {
+            var locationEnd = GetLocation(tripBody.LocationEndLat, tripBody.LocationEndLon);
+            trip.LocationEndId = locationEnd.Id;
+        }
+        if ((tripBody.LocationStartLat != null && tripBody.LocationStartLat != String.Empty) && (tripBody.LocationStartLon != null && tripBody.LocationStartLon != String.Empty))
+        {
+            var locationStart = GetLocation(tripBody.LocationStartLat, tripBody.LocationStartLon);
+            trip.LocationStartId = locationStart.Id;
+        }
         trip.Lesson = tripBody.Lesson;
         trip.SameGender = tripBody.SameGender;
         trip.AvailableSeats = tripBody.AvailableSeats;

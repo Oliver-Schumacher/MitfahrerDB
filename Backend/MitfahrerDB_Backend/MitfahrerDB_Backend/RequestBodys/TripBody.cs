@@ -2,10 +2,10 @@
 {
     public class TripBody
     {
-        public string LocationStartLat { get; set; }
-        public string LocationStartLon { get; set; }
-        public string LocationEndLat { get; set; }
-        public string LocationEndLon { get; set; }
+        public string? LocationStartLat { get; set; }
+        public string? LocationStartLon { get; set; }
+        public string? LocationEndLat { get; set; }
+        public string? LocationEndLon { get; set; }
         public int DriverId { get; set; }
         public int Lesson { get; set; }
         public bool SameGender { get; set; }
