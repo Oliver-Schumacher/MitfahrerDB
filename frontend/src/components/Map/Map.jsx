@@ -27,6 +27,8 @@ function Map() {
     shadowSize: [41, 41]
   });
 
+  console.log(myTrips);
+
   return (
     <>
       <SearchControl getTrips={getMyTrips} getPosition={getPosition} />
@@ -47,7 +49,17 @@ function Map() {
                   parseInt(trip.locationStart.latitude),
                   parseInt(trip.locationStart.longitude)
                 ]}>
-                <Popup>{trip.driver.mail}</Popup>
+                <Popup>
+                  {
+                    <>
+                      <span>{trip.driver.mail}</span>
+                      <br></br>
+                      <span>{trip.driver.gender.name}</span>
+                      <br></br>
+                      <span>{trip.driver.phone}</span>
+                    </>
+                  }
+                </Popup>
               </Marker>
             );
           })}
